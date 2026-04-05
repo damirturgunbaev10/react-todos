@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch("https://jsonplaceholder.typicode.com/todos?_limit=15")
+    fetch("https://jsonplaceholder.typicode.com/todos")
       .then((res) => res.json())
       .then((data) => {
         setTodos(data);

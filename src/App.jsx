@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import TodosList from "./components/TodosList";
+import TodosLists from "./components/TodosList";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/todos")
+    setIsLoading(true);
+    fetch("https://jsonplaceholder.typicode.com/todos?_limit=15")
       .then((res) => res.json())
-      .then((data) => setTodos(data));
+      .then((data) => {
+        setTodos(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   }, []);
 
   return (
@@ -19,7 +28,19 @@ function App() {
       }}
     >
       <h1 style={{ textAlign: "center" }}>Todo List</h1>
-      <TodosList todos={todos} />
+
+      {isLoading ? (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <div
+            className="loader"
+            style={{ fontSize: "24px", fontWeight: "bold" }}
+          >
+            Loading tasks...
+          </div>
+        </div>
+      ) : (
+        <TodosLists todos={todos} />
+      )}
     </div>
   );
 }
